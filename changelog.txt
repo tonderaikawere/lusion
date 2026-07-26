@@ -23,3 +23,4 @@ Step 22 - create oscillator nodes
 Step 23 - apply lowpass filter
 Step 24 - smooth sound fade
 Step 25 - synthesize chord pad
+Step 26 - handle audio suspend
