@@ -33,3 +33,4 @@ Step 32 - animate overlay fade
 Step 33 - handle menu clicks
 Step 34 - add main section
 Step 35 - write bold heading
+Step 36 - animate hero fade
