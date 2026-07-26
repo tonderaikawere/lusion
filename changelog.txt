@@ -29,3 +29,4 @@ Step 28 - style hamburger transition
 Step 29 - create menu overlay
 Step 30 - add menu links
 Step 31 - style navigation menu
+Step 32 - animate overlay fade
