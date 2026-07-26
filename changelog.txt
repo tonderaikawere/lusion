@@ -70,3 +70,4 @@ Step 69 - check compilation status
 Step 70 - add tasks tracking
 Step 71 - update tasks markdown
 Step 72 - tweak particle wave
+Step 73 - refine cursor size
