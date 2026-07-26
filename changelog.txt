@@ -42,3 +42,4 @@ Step 41 - add card gradients
 Step 42 - apply card glow
 Step 43 - animate project pulse
 Step 44 - set image placeholders
+Step 45 - setup services list
