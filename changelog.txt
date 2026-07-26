@@ -12,3 +12,4 @@ Step 11 - setup initial coordinates
 Step 12 - adjust wave frequency
 Step 13 - scale mouse interaction
 Step 14 - refine particle size
+Step 15 - style main index
