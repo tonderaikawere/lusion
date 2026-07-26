@@ -94,3 +94,4 @@ Step 93 - clean up styles
 Step 94 - tweak particle geometry
 Step 95 - configure vite config
 Step 96 - update package scripts
+Step 97 - refine main title
