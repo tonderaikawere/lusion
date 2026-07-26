@@ -1,1 +1,2 @@
 ﻿Lusion.co Clone Project Changelog
+Step 2 - add project foundation
