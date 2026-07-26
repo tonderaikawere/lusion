@@ -37,7 +37,7 @@ const BubbleMesh = ({ radius, color, positionRef }) => {
 };
 
 // Main physics particle & bubble simulation loop
-const PhysicsSimulation = () => {
+const PhysicsSimulation = ({ theme }) => {
   const pointsRef = useRef();
   const { mouse, viewport } = useThree();
 
@@ -299,12 +299,12 @@ const PhysicsSimulation = () => {
           />
         </bufferGeometry>
         <pointsMaterial
-          color="#ffffff"
+          color={theme === 'light' ? '#050506' : '#ffffff'}
           size={0.025}
           sizeAttenuation={true}
           transparent={true}
-          opacity={0.35}
-          blending={THREE.AdditiveBlending}
+          opacity={theme === 'light' ? 0.22 : 0.38}
+          blending={theme === 'light' ? THREE.NormalBlending : THREE.AdditiveBlending}
         />
       </points>
 
@@ -321,20 +321,20 @@ const PhysicsSimulation = () => {
   );
 };
 
-const ParticleBackground = () => {
+const ParticleBackground = ({ theme = 'light', bgColor = '#ffffff' }) => {
   return (
     <div id="canvas-container">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 60 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <color attach="background" args={['#0a0a0b']} />
-        <ambientLight intensity={0.65} />
+        <color attach="background" args={[bgColor]} />
+        <ambientLight intensity={theme === 'light' ? 1.3 : 0.65} />
         {/* Soft directional highlights for glass reflection */}
-        <directionalLight position={[5, 5, 5]} intensity={1.6} color="#ffffff" />
-        <directionalLight position={[-5, -5, 2]} intensity={0.9} color="#aa3bff" />
+        <directionalLight position={[5, 5, 5]} intensity={theme === 'light' ? 2.0 : 1.6} color="#ffffff" />
+        <directionalLight position={[-5, -5, 2]} intensity={0.9} color={theme === 'light' ? '#ffaa00' : '#aa3bff'} />
         <directionalLight position={[0, 5, -5]} intensity={0.5} color="#3b82f6" />
-        <PhysicsSimulation />
+        <PhysicsSimulation theme={theme} />
       </Canvas>
     </div>
   );

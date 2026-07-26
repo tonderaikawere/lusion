@@ -13,6 +13,68 @@ function App() {
   const audioCtxRef = useRef(null);
   const synthNodesRef = useRef(null);
 
+  const [theme, setTheme] = useState('light');
+  const [bgColor, setBgColor] = useState('#ffffff');
+  const [hoveredBg, setHoveredBg] = useState(null);
+
+  // Hook scroll events and update active theme and background color dynamically
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+
+      // Select section nodes
+      const hero = document.getElementById('home-hero');
+      const reel = document.getElementById('home-reel');
+      const featured = document.getElementById('home-featured');
+      const goal = document.getElementById('home-goal');
+      const end = document.getElementById('end-section');
+      const footer = document.getElementById('footer-section');
+
+      let targetBg = '#ffffff';
+      let targetTheme = 'light';
+
+      if (hero && scrollY < hero.offsetHeight - vh * 0.45) {
+        targetBg = '#ffffff';
+        targetTheme = 'light';
+      } else if (reel && scrollY < reel.offsetTop + reel.offsetHeight - vh * 0.45) {
+        targetBg = '#0a0a0b';
+        targetTheme = 'dark';
+      } else if (featured && scrollY < featured.offsetTop + featured.offsetHeight - vh * 0.45) {
+        targetBg = hoveredBg || '#0a0a0b';
+        targetTheme = 'dark';
+      } else if (goal && scrollY < goal.offsetTop + goal.offsetHeight - vh * 0.45) {
+        targetBg = '#0a0a0b';
+        targetTheme = 'dark';
+      } else if (end && scrollY < end.offsetTop + end.offsetHeight - vh * 0.45) {
+        targetBg = '#ffffff';
+        targetTheme = 'light';
+      } else {
+        targetBg = '#0a0a0b';
+        targetTheme = 'dark';
+      }
+
+      setBgColor(targetBg);
+      setTheme(targetTheme);
+
+      // Add appropriate class to HTML tag to let general CSS adapt colors smoothly
+      if (targetTheme === 'light') {
+        document.documentElement.classList.add('is-white-bg');
+        document.documentElement.classList.remove('is-black-bg');
+      } else {
+        document.documentElement.classList.add('is-black-bg');
+        document.documentElement.classList.remove('is-white-bg');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hoveredBg]);
+
   // Play subtle hover UI tick sound using Web Audio API (only if audio is enabled)
   const playTick = () => {
     if (!audioPlaying || !audioCtxRef.current) return;
@@ -181,7 +243,7 @@ function App() {
       <CustomCursor />
       
       {/* Three.js interactive physics canvas */}
-      <ParticleBackground />
+      <ParticleBackground theme={theme} bgColor={bgColor} />
 
       {/* Main UI layout container */}
       <div id="ui" style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.8s ease' }}>
@@ -298,6 +360,8 @@ function App() {
                       data-id={proj.id}
                       data-color-bg={proj.bg}
                       data-color-text={proj.text}
+                      onMouseEnter={() => setHoveredBg(proj.bg)}
+                      onMouseLeave={() => setHoveredBg(null)}
                     >
                       <div className="project-item-main">
                         <div className="project-item-image" style={{ background: `linear-gradient(135deg, ${proj.bg}bb 0%, #0a0a0b 100%)` }}>
