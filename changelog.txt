@@ -89,3 +89,4 @@ Step 88 - verify build output
 Step 89 - cleanup assets folders
 Step 90 - add doc comments
 Step 91 - optimize frame rate
+Step 92 - handle window resize
