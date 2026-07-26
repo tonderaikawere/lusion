@@ -76,3 +76,4 @@ Step 75 - adjust sound frequency
 Step 76 - lower master volume
 Step 77 - fine tune filter
 Step 78 - improve mobile sizing
+Step 79 - clean up margins
