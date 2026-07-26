@@ -10,3 +10,4 @@ Step 9 - integrate canvas container
 Step 10 - add particle wave
 Step 11 - setup initial coordinates
 Step 12 - adjust wave frequency
+Step 13 - scale mouse interaction
