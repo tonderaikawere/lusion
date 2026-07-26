@@ -50,3 +50,4 @@ Step 49 - add about text
 Step 50 - style highlighted spans
 Step 51 - create footer area
 Step 52 - add contact email
+Step 53 - setup email link
