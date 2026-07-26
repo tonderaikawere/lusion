@@ -58,3 +58,4 @@ Step 57 - configure responsive grid
 Step 58 - adjust tablet padding
 Step 59 - fix mobile header
 Step 60 - optimize canvas draw
+Step 61 - reduce particle count
