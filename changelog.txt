@@ -62,3 +62,4 @@ Step 61 - reduce particle count
 Step 62 - tune rotation factor
 Step 63 - smooth follow coordinates
 Step 64 - setup SEO header
+Step 65 - add meta description
