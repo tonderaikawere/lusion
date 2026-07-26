@@ -17,3 +17,4 @@ Step 16 - add header component
 Step 17 - import lucide icons
 Step 18 - style brand logo
 Step 19 - add talk buttons
+Step 20 - configure talk hover
