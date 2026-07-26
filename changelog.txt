@@ -37,3 +37,4 @@ Step 36 - animate hero fade
 Step 37 - add scroll indicator
 Step 38 - create works showcase
 Step 39 - define projects list
+Step 40 - style works grid
