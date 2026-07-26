@@ -21,3 +21,4 @@ Step 20 - configure talk hover
 Step 21 - implement sound toggle
 Step 22 - create oscillator nodes
 Step 23 - apply lowpass filter
+Step 24 - smooth sound fade
