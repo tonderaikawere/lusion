@@ -85,3 +85,4 @@ Step 84 - update about content
 Step 85 - rewrite intro lines
 Step 86 - style scrollbar styles
 Step 87 - test code splits
+Step 88 - verify build output
