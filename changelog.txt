@@ -32,3 +32,4 @@ Step 31 - style navigation menu
 Step 32 - animate overlay fade
 Step 33 - handle menu clicks
 Step 34 - add main section
+Step 35 - write bold heading
