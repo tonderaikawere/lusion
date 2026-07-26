@@ -66,3 +66,4 @@ Step 65 - add meta description
 Step 66 - configure og tags
 Step 67 - add twitter meta
 Step 68 - optimize build assets
+Step 69 - check compilation status
