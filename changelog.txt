@@ -7,3 +7,4 @@ Step 6 - setup custom cursor
 Step 7 - add custom follower
 Step 8 - style cursor follower
 Step 9 - integrate canvas container
+Step 10 - add particle wave
