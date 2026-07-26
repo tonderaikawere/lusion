@@ -72,3 +72,4 @@ Step 71 - update tasks markdown
 Step 72 - tweak particle wave
 Step 73 - refine cursor size
 Step 74 - change cursor color
+Step 75 - adjust sound frequency
