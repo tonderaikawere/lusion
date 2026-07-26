@@ -113,7 +113,7 @@ header {
   gap: 30px;
 }
 
-/* Sound Player Pulse Toggle Button */
+/* Sound Player Circular Canvas Button */
 .sound-btn {
   background: none;
   border: none;
@@ -122,34 +122,23 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
   position: relative;
   z-index: 1002;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: border-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
 .sound-btn:hover {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
 }
 
-.sound-btn span {
+.sound-btn canvas {
   display: block;
-  width: 2px;
-  height: 8px;
-  background-color: var(--color-accent);
-  transition: height 0.2s ease;
-}
-
-.sound-btn.playing span:nth-child(1) { animation: sound-wave-pulse 0.8s ease infinite alternate; }
-.sound-btn.playing span:nth-child(2) { animation: sound-wave-pulse 0.5s ease infinite alternate 0.2s; }
-.sound-btn.playing span:nth-child(3) { animation: sound-wave-pulse 0.7s ease infinite alternate 0.1s; }
-.sound-btn.playing span:nth-child(4) { animation: sound-wave-pulse 0.6s ease infinite alternate 0.3s; }
-
-@keyframes sound-wave-pulse {
-  0% { height: 4px; }
-  100% { height: 18px; }
+  width: 100%;
+  height: 100%;
 }
 
 /* Let's Talk Magnetic Button */
@@ -165,8 +154,7 @@ header {
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 12px;
-  position: relative;
+  justify-content: center;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1002;
   text-decoration: none;
@@ -179,61 +167,95 @@ header {
   transform: translateY(-2px);
 }
 
-.talk-btn svg {
+.talk-btn-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.talk-btn-arrow {
+  display: flex;
+  align-items: center;
   transition: transform 0.3s ease;
 }
 
-.talk-btn:hover svg {
-  transform: translateX(4px);
+.talk-btn:hover .talk-btn-arrow {
+  transform: translate(2px, -2px);
+}
+
+.talk-btn-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: currentColor;
+  border-radius: 50%;
+  animation: talk-dot-pulse 1s infinite alternate;
+}
+
+@keyframes talk-dot-pulse {
+  0% { transform: scale(0.7); opacity: 0.4; }
+  100% { transform: scale(1.3); opacity: 1; }
 }
 
 /* Menu Toggle Button */
 .menu-btn {
   background: none;
-  border: none;
+  border: 1px solid var(--color-border);
   color: var(--color-accent);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 6px;
-  height: 44px;
-  width: 44px;
+  border-radius: 30px;
+  padding: 12px 26px;
+  height: auto;
   position: relative;
   z-index: 1002;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  padding-right: 13px;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .menu-btn:hover {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: #fff;
+  background-color: #fff;
+  color: #000;
 }
 
-.menu-btn .line {
-  width: 18px;
-  height: 2px;
-  background-color: var(--color-accent);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.menu-btn-inner {
+  position: relative;
+  display: block;
+  height: 18px;
+  width: 48px;
 }
 
-.menu-btn .line:nth-child(2) {
-  width: 12px;
+.menu-btn-text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
 }
 
-.menu-btn.open {
-  padding-right: 12px;
+.menu-btn.open .menu-text-open {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
-.menu-btn.open .line:nth-child(1) {
-  transform: translateY(4px) rotate(45deg);
-  width: 18px;
+.menu-btn:not(.open) .menu-text-close {
+  transform: translateY(100%);
+  opacity: 0;
 }
 
-.menu-btn.open .line:nth-child(2) {
-  transform: translateY(-4px) rotate(-45deg);
-  width: 18px;
+.menu-btn.open .menu-text-close {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.menu-btn:not(.open) .menu-text-open {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 /* Fullscreen Menu Overlay Styling */

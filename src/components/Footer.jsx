@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <section id="contact" className="contact-section">
       <div className="contact-main">
-        <p className="contact-label">Let's collaborate</p>
-        <a href="mailto:hello@lusion.co" className="contact-email">
+        <p className="contact-label interactive-physics-obstacle">Let's collaborate</p>
+        <a href="mailto:hello@lusion.co" className="contact-email interactive-physics-obstacle">
           hello@lusion.co
         </a>
       </div>

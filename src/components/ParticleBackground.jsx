@@ -25,9 +25,9 @@ const BubbleMesh = ({ radius, color, positionRef }) => {
         metalness={0.1}
         clearcoat={1.0}
         clearcoatRoughness={0.1}
-        transmission={0.85} // glass refraction
-        thickness={1.5}
-        ior={1.4}
+        transmission={0.88} // high-fidelity glass reflection
+        thickness={1.6}
+        ior={1.42}
         specularIntensity={1.0}
         transparent={true}
         opacity={0.9}
@@ -42,8 +42,8 @@ const PhysicsSimulation = () => {
   const { mouse, viewport } = useThree();
 
   // Grid dimensions for background wave particles
-  const countX = 60;
-  const countY = 60;
+  const countX = 65;
+  const countY = 65;
   const numParticles = countX * countY;
 
   // Background wave particle coordinates
@@ -75,15 +75,15 @@ const PhysicsSimulation = () => {
         color: colors[i % colors.length],
         // Random starting positions within boundaries
         pos: {
-          x: (Math.random() - 0.5) * 10,
-          y: (Math.random() - 0.5) * 6,
-          z: (Math.random() - 0.5) * 3
+          x: (Math.random() - 0.5) * 8,
+          y: (Math.random() - 0.5) * 5,
+          z: (Math.random() - 0.5) * 2
         },
         // Random starting velocities
         vel: {
           x: (Math.random() - 0.5) * 0.03,
           y: (Math.random() - 0.5) * 0.03,
-          z: (Math.random() - 0.5) * 0.015
+          z: (Math.random() - 0.5) * 0.01
         },
         ref: React.createRef() // position reference object
       });
@@ -129,7 +129,28 @@ const PhysicsSimulation = () => {
       posAttribute.needsUpdate = true;
     }
 
-    // 2. RUN PHYSICS SIMULATION FOR BUBBLES
+    // 2. QUERY DOM OBSTACLES (HTML text bounding boxes mapped to 3D space)
+    const elements = document.querySelectorAll('.interactive-physics-obstacle');
+    const boxes = [];
+    elements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      // Ensure element is visible on screen
+      if (rect.width > 0 && rect.height > 0 && rect.top < window.innerHeight && rect.bottom > 0) {
+        const leftNDC = (rect.left / window.innerWidth) * 2 - 1;
+        const rightNDC = (rect.right / window.innerWidth) * 2 - 1;
+        const topNDC = -(rect.top / window.innerHeight) * 2 + 1;
+        const bottomNDC = -(rect.bottom / window.innerHeight) * 2 + 1;
+
+        boxes.push({
+          minX: leftNDC * (viewport.width / 2),
+          maxX: rightNDC * (viewport.width / 2),
+          minY: bottomNDC * (viewport.height / 2),
+          maxY: topNDC * (viewport.height / 2)
+        });
+      }
+    });
+
+    // 3. RUN PHYSICS SIMULATION FOR BUBBLES
     const boxWidth = viewport.width / 2 + 1;
     const boxHeight = viewport.height / 2 + 1;
     const boxDepth = 3;
@@ -152,10 +173,10 @@ const PhysicsSimulation = () => {
       const dx = p.x - mouseX;
       const dy = p.y - mouseY;
       const distToMouse = Math.sqrt(dx * dx + dy * dy);
-      const repulsionRadius = 3.0;
+      const repulsionRadius = 3.2;
 
       if (distToMouse < repulsionRadius) {
-        const force = (repulsionRadius - distToMouse) * 0.004;
+        const force = (repulsionRadius - distToMouse) * 0.005;
         v.x += (dx / distToMouse) * force;
         v.y += (dy / distToMouse) * force;
       }
@@ -165,20 +186,57 @@ const PhysicsSimulation = () => {
       v.y *= 0.985;
       v.z *= 0.985;
 
-      // Add small organic random drift
-      v.x += (Math.random() - 0.5) * 0.001;
-      v.y += (Math.random() - 0.5) * 0.001;
+      // Small organic drift
+      v.x += (Math.random() - 0.5) * 0.0012;
+      v.y += (Math.random() - 0.5) * 0.0012;
       v.z += (Math.random() - 0.5) * 0.0005;
 
       // Bounce boundaries
-      if (p.x - b.radius < -boxWidth) { p.x = -boxWidth + b.radius; v.x *= -0.9; }
-      if (p.x + b.radius > boxWidth) { p.x = boxWidth - b.radius; v.x *= -0.9; }
-      if (p.y - b.radius < -boxHeight) { p.y = -boxHeight + b.radius; v.y *= -0.9; }
-      if (p.y + b.radius > boxHeight) { p.y = boxHeight - b.radius; v.y *= -0.9; }
-      if (p.z - b.radius < -boxDepth) { p.z = -boxDepth + b.radius; v.z *= -0.9; }
-      if (p.z + b.radius > boxDepth) { p.z = boxDepth - b.radius; v.z *= -0.9; }
+      if (p.x - b.radius < -boxWidth) { p.x = -boxWidth + b.radius; v.x *= -0.95; }
+      if (p.x + b.radius > boxWidth) { p.x = boxWidth - b.radius; v.x *= -0.95; }
+      if (p.y - b.radius < -boxHeight) { p.y = -boxHeight + b.radius; v.y *= -0.95; }
+      if (p.y + b.radius > boxHeight) { p.y = boxHeight - b.radius; v.y *= -0.95; }
+      if (p.z - b.radius < -boxDepth) { p.z = -boxDepth + b.radius; v.z *= -0.95; }
+      if (p.z + b.radius > boxDepth) { p.z = boxDepth - b.radius; v.z *= -0.95; }
 
-      // Update ref position for rendering
+      // Resolve collision with DOM text boxes
+      boxes.forEach((box) => {
+        const cx = Math.max(box.minX, Math.min(p.x, box.maxX));
+        const cy = Math.max(box.minY, Math.min(p.y, box.maxY));
+
+        const diffX = p.x - cx;
+        const diffY = p.y - cy;
+        const dist = Math.sqrt(diffX * diffX + diffY * diffY);
+
+        if (dist < b.radius) {
+          const overlap = b.radius - dist;
+          if (dist === 0) {
+            // inside box push to nearest edge
+            const dl = p.x - box.minX;
+            const dr = box.maxX - p.x;
+            const dt = box.maxY - p.y;
+            const db = p.y - box.minY;
+            const minD = Math.min(dl, dr, dt, db);
+            if (minD === dl) { p.x = box.minX - b.radius; v.x = -Math.abs(v.x) * 0.9; }
+            else if (minD === dr) { p.x = box.maxX + b.radius; v.x = Math.abs(v.x) * 0.9; }
+            else if (minD === dt) { p.y = box.maxY + b.radius; v.y = Math.abs(v.y) * 0.9; }
+            else { p.y = box.minY - b.radius; v.y = -Math.abs(v.y) * 0.9; }
+          } else {
+            // Normal collision push
+            p.x += (diffX / dist) * overlap;
+            p.y += (diffY / dist) * overlap;
+
+            // Bounce reflecting velocity
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+              v.x = Math.sign(diffX) * Math.abs(v.x) * 0.9;
+            } else {
+              v.y = Math.sign(diffY) * Math.abs(v.y) * 0.9;
+            }
+          }
+        }
+      });
+
+      // Update position coordinates
       if (b.ref.current) {
         b.ref.current.x = p.x;
         b.ref.current.y = p.y;
@@ -217,10 +275,6 @@ const PhysicsSimulation = () => {
           const ny = dy / dist;
           const nz = dz / dist;
 
-          // Relative velocity
-          const kx = b1.vel.x - b2.vel.x;
-          const ky = b1.vel.y - b2.vel.y;
-          const kz = b1.vel.z - b2.vel.z;
           const pFactor = 2 * (b1.vel.x * nx + b1.vel.y * ny + b1.vel.z * nz - (b2.vel.x * nx + b2.vel.y * ny + b2.vel.z * nz)) / (b1.radius + b2.radius);
 
           b1.vel.x -= pFactor * b2.radius * nx * 0.95;
@@ -246,10 +300,10 @@ const PhysicsSimulation = () => {
         </bufferGeometry>
         <pointsMaterial
           color="#ffffff"
-          size={0.03}
+          size={0.025}
           sizeAttenuation={true}
           transparent={true}
-          opacity={0.4}
+          opacity={0.35}
           blending={THREE.AdditiveBlending}
         />
       </points>
@@ -275,10 +329,10 @@ const ParticleBackground = () => {
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
         <color attach="background" args={['#0a0a0b']} />
-        <ambientLight intensity={0.6} />
+        <ambientLight intensity={0.65} />
         {/* Soft directional highlights for glass reflection */}
-        <directionalLight position={[5, 5, 5]} intensity={1.5} color="#ffffff" />
-        <directionalLight position={[-5, -5, 2]} intensity={0.8} color="#aa3bff" />
+        <directionalLight position={[5, 5, 5]} intensity={1.6} color="#ffffff" />
+        <directionalLight position={[-5, -5, 2]} intensity={0.9} color="#aa3bff" />
         <directionalLight position={[0, 5, -5]} intensity={0.5} color="#3b82f6" />
         <PhysicsSimulation />
       </Canvas>

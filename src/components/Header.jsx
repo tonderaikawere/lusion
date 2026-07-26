@@ -1,6 +1,73 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Header = ({ menuOpen, setMenuOpen, audioPlaying, setAudioPlaying }) => {
+  const canvasRef = useRef(null);
+
+  // Animate the sound toggle button canvas (rotating circular wave)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+    let rotation = 0;
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const radius = 10;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotation);
+
+      // Draw active waveform or passive circle
+      if (audioPlaying) {
+        rotation += 0.02;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+
+        const numPoints = 60;
+        for (let i = 0; i < numPoints; i++) {
+          const angle = (i / numPoints) * Math.PI * 2;
+          // Generate wave noise
+          const wave = Math.sin(angle * 6 + rotation * 5) * 3 + 
+                       Math.cos(angle * 12 - rotation * 2) * 1.5;
+          const r = radius + wave;
+          const x = Math.cos(angle) * r;
+          const y = Math.sin(angle) * r;
+
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      } else {
+        // Muted passive state (solid clean border circle with central dot)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.beginPath();
+        ctx.arc(0, 0, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [audioPlaying]);
+
   return (
     <header>
       <a href="/" className="logo-link" aria-label="Go to home page">
@@ -12,34 +79,40 @@ const Header = ({ menuOpen, setMenuOpen, audioPlaying, setAudioPlaying }) => {
       </a>
 
       <div className="header-controls">
-        {/* Sound toggle button */}
+        {/* Circular canvas sound visualizer toggle */}
         <button 
-          className={`sound-btn ${audioPlaying ? 'playing' : ''}`} 
+          className="sound-btn" 
           onClick={() => setAudioPlaying(!audioPlaying)}
           aria-label={audioPlaying ? "Mute audio" : "Play audio"}
         >
-          <span />
-          <span />
-          <span />
-          <span />
+          <canvas ref={canvasRef} width="40" height="40" />
         </button>
 
         {/* Let's Talk button */}
         <a href="mailto:hello@lusion.co" className="talk-btn">
-          <span>Let's talk</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 16 16">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.343 8h11.314m0 0-4.984 4.984M13.657 8 8.673 3.016" />
-          </svg>
+          <div className="talk-btn-inner">
+            <span className="talk-btn-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 16 16">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.343 8h11.314m0 0-4.984 4.984M13.657 8 8.673 3.016" />
+              </svg>
+            </span>
+            <span className="talk-btn-text">Let's talk</span>
+            <span className="talk-btn-dots">
+              <span className="talk-btn-dot" />
+            </span>
+          </div>
         </a>
 
-        {/* Hamburger Menu button */}
+        {/* Menu button showing text depending on state */}
         <button 
           className={`menu-btn ${menuOpen ? 'open' : ''}`} 
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          <span className="line" />
-          <span className="line" />
+          <div className="menu-btn-inner">
+            <span className="menu-btn-text menu-text-open">Menu</span>
+            <span className="menu-btn-text menu-text-close">Close</span>
+          </div>
         </button>
       </div>
     </header>

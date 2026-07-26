@@ -50,7 +50,7 @@ const FeaturedWorks = () => {
     <section id="works" className="works-section">
       <div className="section-header">
         <span className="section-label">Selected Works</span>
-        <h2>Creating technically inventive digital experiences</h2>
+        <h2 className="interactive-physics-obstacle">Creating technically inventive digital experiences</h2>
       </div>
 
       <div className="works-grid">

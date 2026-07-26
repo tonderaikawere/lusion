@@ -182,7 +182,7 @@ function App() {
         <main id="home">
           {/* Hero section */}
           <section className="hero-section">
-            <h1 className="hero-heading">
+            <h1 className="hero-heading interactive-physics-obstacle">
               We design and produce <span>3D visual storytelling</span>, immersive websites, and interactive digital experiences.
             </h1>
             <div className="scroll-indicator">

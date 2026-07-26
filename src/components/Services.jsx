@@ -22,7 +22,7 @@ const Services = () => {
 
   return (
     <section id="services" className="services-section">
-      <h2>Capabilities</h2>
+      <h2 className="interactive-physics-obstacle">Capabilities</h2>
       <div className="services-list">
         {items.map((item, index) => (
           <div key={index} className="service-item">
