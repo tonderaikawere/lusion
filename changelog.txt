@@ -54,3 +54,4 @@ Step 53 - setup email link
 Step 54 - style contact hover
 Step 55 - add social links
 Step 56 - style social icons
+Step 57 - configure responsive grid
