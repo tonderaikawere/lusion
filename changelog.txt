@@ -45,3 +45,4 @@ Step 44 - set image placeholders
 Step 45 - setup services list
 Step 46 - style service items
 Step 47 - add service description
+Step 48 - animate hover margin
