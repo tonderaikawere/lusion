@@ -4,3 +4,4 @@ Step 3 - install threejs fiber
 Step 4 - create layout template
 Step 5 - define outfit font
 Step 6 - setup custom cursor
+Step 7 - add custom follower
