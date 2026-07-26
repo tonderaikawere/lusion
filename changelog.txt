@@ -46,3 +46,4 @@ Step 45 - setup services list
 Step 46 - style service items
 Step 47 - add service description
 Step 48 - animate hover margin
+Step 49 - add about text
