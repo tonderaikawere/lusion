@@ -86,3 +86,4 @@ Step 85 - rewrite intro lines
 Step 86 - style scrollbar styles
 Step 87 - test code splits
 Step 88 - verify build output
+Step 89 - cleanup assets folders
