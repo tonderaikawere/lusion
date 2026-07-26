@@ -56,3 +56,4 @@ Step 55 - add social links
 Step 56 - style social icons
 Step 57 - configure responsive grid
 Step 58 - adjust tablet padding
+Step 59 - fix mobile header
